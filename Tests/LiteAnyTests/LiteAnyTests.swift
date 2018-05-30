@@ -21,10 +21,15 @@ final class LiteAnyTests: XCTestCase {
 
         let jsonData = try JSONEncoder().encode(list)
         let jsonString = String(data: jsonData, encoding: .utf8)!
-        // TODO
+        #if os(Linux)
+        XCTAssert(jsonString == """
+            [null,true,1,1.1,"a"]
+            """)
+        #else
         XCTAssert(jsonString == """
         [null,true,1,1.1000000000000001,"a"]
         """)
+        #endif
     }
 
     static var allTests = [
