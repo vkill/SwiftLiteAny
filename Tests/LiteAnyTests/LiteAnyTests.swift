@@ -32,8 +32,30 @@ final class LiteAnyTests: XCTestCase {
         #endif
     }
 
+    func testTo() throws {
+        XCTAssert(try LiteAny.nil.to(Bool?.self) == Optional<Bool>.none)
+        XCTAssert(try LiteAny.nil.to(Int?.self) == Optional<Int>.none)
+        XCTAssert(try LiteAny.nil.to(Double?.self) == Optional<Double>.none)
+        XCTAssert(try LiteAny.nil.to(String?.self) == Optional<String>.none)
+
+        XCTAssert(try LiteAny.bool(true).to(Bool?.self) == Optional<Bool>(true))
+        XCTAssert(try LiteAny.int(1).to(Int?.self) == Optional<Int>(1))
+        XCTAssert(try LiteAny.double(1.1).to(Double?.self) == Optional<Double>(1.1))
+        XCTAssert(try LiteAny.string("1").to(String?.self) == Optional<String>("1"))
+
+        XCTAssert(try LiteAny.bool(true).to(Bool.self) == true)
+        XCTAssert(try LiteAny.int(1).to(Int.self) == 1)
+        XCTAssert(try LiteAny.double(1.1).to(Double.self) == 1.1)
+        XCTAssert(try LiteAny.string("1").to(String.self) == "1")
+
+        XCTAssertThrowsError(try LiteAny.nil.to(UInt?.self))
+        XCTAssertThrowsError(try LiteAny.int(1).to(UInt?.self))
+        XCTAssertThrowsError(try LiteAny.nil.to(String.self))
+    }
+
     static var allTests = [
         ("testJSONDecode", testJSONDecode),
         ("testJSONEncode", testJSONEncode),
+        ("testTo", testTo),
     ]
 }
