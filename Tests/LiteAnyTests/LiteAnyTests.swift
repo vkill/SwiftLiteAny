@@ -23,8 +23,8 @@ final class LiteAnyTests: XCTestCase {
         let jsonString = String(data: jsonData, encoding: .utf8)!
         #if os(Linux)
         XCTAssert(jsonString == """
-            [null,true,1,1.1,"a"]
-            """)
+        [null,true,1,1.1,"a"]
+        """)
         #else
         XCTAssert(jsonString == """
         [null,true,1,1.1000000000000001,"a"]
@@ -33,15 +33,15 @@ final class LiteAnyTests: XCTestCase {
     }
 
     func testTo() throws {
-        XCTAssert(try LiteAny.nil.to(Bool?.self) == Optional<Bool>.none)
-        XCTAssert(try LiteAny.nil.to(Int?.self) == Optional<Int>.none)
-        XCTAssert(try LiteAny.nil.to(Double?.self) == Optional<Double>.none)
-        XCTAssert(try LiteAny.nil.to(String?.self) == Optional<String>.none)
+        XCTAssert(try LiteAny.nil.to(Bool?.self) == Bool?.none)
+        XCTAssert(try LiteAny.nil.to(Int?.self) == Int?.none)
+        XCTAssert(try LiteAny.nil.to(Double?.self) == Double?.none)
+        XCTAssert(try LiteAny.nil.to(String?.self) == String?.none)
 
-        XCTAssert(try LiteAny.bool(true).to(Bool?.self) == Optional<Bool>(true))
-        XCTAssert(try LiteAny.int(1).to(Int?.self) == Optional<Int>(1))
-        XCTAssert(try LiteAny.double(1.1).to(Double?.self) == Optional<Double>(1.1))
-        XCTAssert(try LiteAny.string("1").to(String?.self) == Optional<String>("1"))
+        XCTAssert(try LiteAny.bool(true).to(Bool?.self) == Bool?(true))
+        XCTAssert(try LiteAny.int(1).to(Int?.self) == Int?(1))
+        XCTAssert(try LiteAny.double(1.1).to(Double?.self) == Double?(1.1))
+        XCTAssert(try LiteAny.string("1").to(String?.self) == String?("1"))
 
         XCTAssert(try LiteAny.bool(true).to(Bool.self) == true)
         XCTAssert(try LiteAny.int(1).to(Int.self) == 1)
@@ -56,6 +56,6 @@ final class LiteAnyTests: XCTestCase {
     static var allTests = [
         ("testJSONDecode", testJSONDecode),
         ("testJSONEncode", testJSONEncode),
-        ("testTo", testTo),
+        ("testTo", testTo)
     ]
 }

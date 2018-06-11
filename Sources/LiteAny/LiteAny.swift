@@ -6,30 +6,25 @@ public enum LiteAny: Codable, Equatable {
     case string(String)
 
     public init(from decoder: Decoder) throws {
-        let c = try decoder.singleValueContainer()
-        if c.decodeNil() {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
             self = .nil
             return
         }
         do {
-            let v = try c.decode(Bool.self)
-            self = .bool(v)
+            self = .bool(try container.decode(Bool.self))
         } catch {
             do {
-                let v = try c.decode(Int.self)
-                self = .int(v)
+                self = .int(try container.decode(Int.self))
             } catch {
                 do {
-                    let v = try c.decode(Double.self)
-                    self = .double(v)
+                    self = .double(try container.decode(Double.self))
                 } catch {
                     do {
-                        let v = try c.decode(Float.self)
-                        self = .double(Double(v))
+                        self = .double(Double(try container.decode(Float.self)))
                     } catch {
                         do {
-                            let v = try c.decode(String.self)
-                            self = .string(v)
+                            self = .string(try container.decode(String.self))
                         }
                     }
                 }
@@ -38,106 +33,106 @@ public enum LiteAny: Codable, Equatable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        var c = encoder.singleValueContainer()
+        var container = encoder.singleValueContainer()
         switch self {
         case .nil:
-            try c.encodeNil()
-        case .bool(let v):
-            try c.encode(v)
-        case .int(let v):
-            try c.encode(v)
-        case .double(let v):
-            try c.encode(v)
-        case .string(let v):
-            try c.encode(v)
+            try container.encodeNil()
+        case .bool(let val):
+            try container.encode(val)
+        case .int(let val):
+            try container.encode(val)
+        case .double(let val):
+            try container.encode(val)
+        case .string(let val):
+            try container.encode(val)
         }
     }
 
     enum ToErrors: Error {
-        case NoMatch
-        case IsNil
+        case noMatch
+        case isNil
     }
 
-    public func to<T>(_ type: Optional<T>.Type) throws -> Optional<T> where T: Decodable {
+    public func to<T>(_ type: T?.Type) throws -> T? where T: Decodable {
         switch self {
         case .nil:
             switch type {
-            case is Optional<Bool>.Type:
-                return Optional<T>.none
-            case is Optional<Int>.Type:
-                return Optional<T>.none
-            case is Optional<Double>.Type:
-                return Optional<T>.none
-            case is Optional<String>.Type:
-                return Optional<T>.none
+            case is Bool?.Type:
+                return T?.none
+            case is Int?.Type:
+                return T?.none
+            case is Double?.Type:
+                return T?.none
+            case is String?.Type:
+                return T?.none
             default:
                 ()
             }
-        case .bool(let v):
+        case .bool(let val):
             switch type {
-            case is Optional<Bool>.Type:
-                return Optional<T>(v as! T)
+            case is Bool?.Type:
+                return T?(val as! T)
             default:
                 ()
             }
-        case .int(let v):
+        case .int(let val):
             switch type {
-            case is Optional<Int>.Type:
-                return Optional<T>(v as! T)
+            case is Int?.Type:
+                return T?(val as! T)
             default:
                 ()
             }
-        case .double(let v):
+        case .double(let val):
             switch type {
-            case is Optional<Double>.Type:
-                return Optional<T>(v as! T)
+            case is Double?.Type:
+                return T?(val as! T)
             default:
                 ()
             }
-        case .string(let v):
+        case .string(let val):
             switch type {
-            case is Optional<String>.Type:
-                return Optional<T>(v as! T)
+            case is String?.Type:
+                return T?(val as! T)
             default:
                 ()
             }
         }
-        throw ToErrors.NoMatch
+        throw ToErrors.noMatch
     }
 
     public func to<T>(_ type: T.Type) throws -> T where T: Decodable {
         switch self {
         case .nil:
-            throw ToErrors.IsNil
-        case .bool(let v):
+            throw ToErrors.isNil
+        case .bool(let val):
             switch type {
             case is Bool.Type:
-                return v as! T
+                return val as! T
             default:
                 ()
             }
-        case .int(let v):
+        case .int(let val):
             switch type {
             case is Int.Type:
-                return v as! T
+                return val as! T
             default:
                 ()
             }
-        case .double(let v):
+        case .double(let val):
             switch type {
             case is Double.Type:
-                return v as! T
+                return val as! T
             default:
                 ()
             }
-        case .string(let v):
+        case .string(let val):
             switch type {
             case is String.Type:
-                return v as! T
+                return val as! T
             default:
                 ()
             }
         }
-        throw ToErrors.NoMatch
+        throw ToErrors.noMatch
     }
 }
