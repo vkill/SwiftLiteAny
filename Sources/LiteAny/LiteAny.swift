@@ -53,7 +53,10 @@ public enum LiteAny: Codable, Equatable {
         case isNil
     }
 
-    public func to<T>(_ type: T?.Type) throws -> T? where T: Decodable {
+    // swiftlint:disable cyclomatic_complexity
+    public func to<T>(_ type: T?.Type) throws -> T? where T: Decodable
+    // swiftlint:enable cyclomatic_complexity
+    {
         switch self {
         case .nil:
             switch type {
@@ -71,28 +74,36 @@ public enum LiteAny: Codable, Equatable {
         case .bool(let val):
             switch type {
             case is Bool?.Type:
+                // swiftlint:disable force_cast
                 return T?(val as! T)
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .int(let val):
             switch type {
             case is Int?.Type:
+                // swiftlint:disable force_cast
                 return T?(val as! T)
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .double(let val):
             switch type {
             case is Double?.Type:
+                // swiftlint:disable force_cast
                 return T?(val as! T)
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .string(let val):
             switch type {
             case is String?.Type:
+                // swiftlint:disable force_cast
                 return T?(val as! T)
+                // swiftlint:enable force_cast
             default:
                 ()
             }
@@ -100,35 +111,46 @@ public enum LiteAny: Codable, Equatable {
         throw ToErrors.noMatch
     }
 
-    public func to<T>(_ type: T.Type) throws -> T where T: Decodable {
+    // swiftlint:disable cyclomatic_complexity
+    public func to<T>(_ type: T.Type) throws -> T where T: Decodable
+    // swiftlint:enable cyclomatic_complexity
+    {
         switch self {
         case .nil:
             throw ToErrors.isNil
         case .bool(let val):
             switch type {
             case is Bool.Type:
+                // swiftlint:disable force_cast
                 return val as! T
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .int(let val):
             switch type {
             case is Int.Type:
+                // swiftlint:disable force_cast
                 return val as! T
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .double(let val):
             switch type {
             case is Double.Type:
+                // swiftlint:disable force_cast
                 return val as! T
+                // swiftlint:enable force_cast
             default:
                 ()
             }
         case .string(let val):
             switch type {
             case is String.Type:
+                // swiftlint:disable force_cast
                 return val as! T
+                // swiftlint:enable force_cast
             default:
                 ()
             }
