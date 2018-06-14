@@ -53,9 +53,19 @@ final class LiteAnyTests: XCTestCase {
         XCTAssertThrowsError(try LiteAny.nil.to(String.self))
     }
 
+    func testEquation() {
+        XCTAssert(LiteAny.nil == nil)
+        XCTAssert(LiteAny.bool(true) != nil)
+        XCTAssert(LiteAny.bool(true) == true)
+        XCTAssert(LiteAny.int(1) == 1)
+        XCTAssert(LiteAny.double(1.1) == 1.1)
+        XCTAssert(LiteAny.string("1") == "1")
+    }
+
     static var allTests = [
         ("testJSONDecode", testJSONDecode),
         ("testJSONEncode", testJSONEncode),
-        ("testTo", testTo)
+        ("testTo", testTo),
+        ("testEquation", testEquation)
     ]
 }

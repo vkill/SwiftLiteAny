@@ -1,10 +1,12 @@
-public enum LiteAny: Codable, Equatable {
+public enum LiteAny: Equatable {
     case `nil`
     case bool(Bool)
     case int(Int)
     case double(Double)
     case string(String)
+}
 
+extension LiteAny: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if container.decodeNil() {
@@ -47,8 +49,10 @@ public enum LiteAny: Codable, Equatable {
             try container.encode(val)
         }
     }
+}
 
-    enum ToErrors: Error {
+extension LiteAny {
+    public enum ToErrors: Error {
         case noMatch
         case isNil
     }
@@ -156,5 +160,31 @@ public enum LiteAny: Codable, Equatable {
             }
         }
         throw ToErrors.noMatch
+    }
+}
+
+extension LiteAny {
+    public static func == (lhs: LiteAny, rhs: _OptionalNilComparisonType) -> Bool {
+        return lhs == .nil
+    }
+
+    public static func != (lhs: LiteAny, rhs: _OptionalNilComparisonType) -> Bool {
+        return lhs != .nil
+    }
+
+    public static func == (lhs: LiteAny, rhs: Bool) -> Bool {
+        return lhs == .bool(rhs)
+    }
+
+    public static func == (lhs: LiteAny, rhs: Int) -> Bool {
+        return lhs == .int(rhs)
+    }
+
+    public static func == (lhs: LiteAny, rhs: Double) -> Bool {
+        return lhs == .double(rhs)
+    }
+
+    public static func == (lhs: LiteAny, rhs: String) -> Bool {
+        return lhs == .string(rhs)
     }
 }
