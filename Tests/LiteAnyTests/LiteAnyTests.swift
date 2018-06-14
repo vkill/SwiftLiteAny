@@ -59,7 +59,7 @@ final class LiteAnyTests: XCTestCase {
 
     func testEquation() {
         XCTAssert(LiteAny.nil == nil)
-        XCTAssert(LiteAny.bool(true) != nil)
+        XCTAssertFalse(LiteAny.nil != nil)
         XCTAssert(LiteAny.bool(true) == true)
         XCTAssert(LiteAny.int(1) == 1)
         XCTAssert(LiteAny.double(1.1) == 1.1)
