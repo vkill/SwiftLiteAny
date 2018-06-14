@@ -1,4 +1,4 @@
-public enum LiteAny: Equatable {
+public enum LiteAny: Equatable, Hashable {
     case `nil`
     case bool(Bool)
     case int(Int)

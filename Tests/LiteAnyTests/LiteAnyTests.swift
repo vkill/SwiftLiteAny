@@ -9,6 +9,9 @@ final class LiteAnyTests: XCTestCase {
         let jsonData = jsonString.data(using: .utf8)!
 
         let list = try JSONDecoder().decode([LiteAny].self, from: jsonData)
+
+        print(list)
+
         XCTAssert(list == [
             LiteAny.nil, LiteAny.bool(true), LiteAny.int(1), LiteAny.double(1.1), LiteAny.string("a")
         ])
@@ -21,6 +24,7 @@ final class LiteAnyTests: XCTestCase {
 
         let jsonData = try JSONEncoder().encode(list)
         let jsonString = String(data: jsonData, encoding: .utf8)!
+        
         #if os(Linux)
         XCTAssert(jsonString == """
         [null,true,1,1.1,"a"]
