@@ -10,8 +10,6 @@ final class LiteAnyTests: XCTestCase {
 
         let list = try JSONDecoder().decode([LiteAny].self, from: jsonData)
 
-        print(list)
-
         XCTAssert(list == [
             LiteAny.nil, LiteAny.bool(true), LiteAny.int(1), LiteAny.double(1.1), LiteAny.string("a")
         ])
@@ -22,9 +20,11 @@ final class LiteAnyTests: XCTestCase {
             LiteAny.nil, LiteAny.bool(true), LiteAny.int(1), LiteAny.double(1.1), LiteAny.string("a")
         ]
 
+        print(list)
+
         let jsonData = try JSONEncoder().encode(list)
         let jsonString = String(data: jsonData, encoding: .utf8)!
-        
+
         #if os(Linux)
         XCTAssert(jsonString == """
         [null,true,1,1.1,"a"]
@@ -52,9 +52,16 @@ final class LiteAnyTests: XCTestCase {
         XCTAssert(try LiteAny.double(1.1).to(Double.self) == 1.1)
         XCTAssert(try LiteAny.string("1").to(String.self) == "1")
 
-        XCTAssertThrowsError(try LiteAny.nil.to(UInt?.self))
-        XCTAssertThrowsError(try LiteAny.int(1).to(UInt?.self))
-        XCTAssertThrowsError(try LiteAny.nil.to(String.self))
+        XCTAssertThrowsError(try LiteAny.bool(true).to(Int.self)) { error in
+            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.noMatch)
+        }
+        XCTAssertThrowsError(try LiteAny.bool(true).to(Int?.self)) { error in
+            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.noMatch)
+        }
+
+        XCTAssertThrowsError(try LiteAny.nil.to(String.self)) { error in
+            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.isNil)
+        }
     }
 
     func testEquation() {

@@ -51,6 +51,12 @@ extension LiteAny: Codable {
     }
 }
 
+public protocol LiteAnyDecodable {}
+extension Bool: LiteAnyDecodable {}
+extension Int: LiteAnyDecodable {}
+extension Double: LiteAnyDecodable {}
+extension String: LiteAnyDecodable {}
+
 extension LiteAny {
     public enum ToErrors: Error {
         case noMatch
@@ -58,7 +64,7 @@ extension LiteAny {
     }
 
     // swiftlint:disable cyclomatic_complexity
-    public func to<T>(_ type: T?.Type) throws -> T? where T: Decodable
+    public func to<T>(_ type: T?.Type) throws -> T? where T: LiteAnyDecodable
     // swiftlint:enable cyclomatic_complexity
     {
         switch self {
@@ -116,7 +122,7 @@ extension LiteAny {
     }
 
     // swiftlint:disable cyclomatic_complexity
-    public func to<T>(_ type: T.Type) throws -> T where T: Decodable
+    public func to<T>(_ type: T.Type) throws -> T where T: LiteAnyDecodable
     // swiftlint:enable cyclomatic_complexity
     {
         switch self {
