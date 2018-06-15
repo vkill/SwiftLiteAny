@@ -170,11 +170,11 @@ extension LiteAny {
 }
 
 extension LiteAny {
-    public static func == (lhs: LiteAny, rhs: _OptionalNilComparisonType) -> Bool {
+    public static func == (lhs: LiteAny, rhs: LiteAny?) -> Bool {
         return lhs == .nil
     }
 
-    public static func != (lhs: LiteAny, rhs: _OptionalNilComparisonType) -> Bool {
+    public static func != (lhs: LiteAny, rhs: LiteAny?) -> Bool {
         return lhs != .nil
     }
 
