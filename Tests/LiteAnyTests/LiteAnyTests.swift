@@ -10,9 +10,10 @@ final class LiteAnyTests: XCTestCase {
 
         let list = try JSONDecoder().decode([LiteAny].self, from: jsonData)
 
-        XCTAssert(list == [
-            LiteAny.nil, LiteAny.bool(true), LiteAny.int(1), LiteAny.double(1.1), LiteAny.string("a")
-        ])
+        XCTAssertEqual(
+            list,
+            [LiteAny.nil, LiteAny.bool(true), LiteAny.int(1), LiteAny.double(1.1), LiteAny.string("a")]
+        )
     }
 
     func testJSONEncode() throws {
@@ -26,51 +27,57 @@ final class LiteAnyTests: XCTestCase {
         let jsonString = String(data: jsonData, encoding: .utf8)!
 
         #if os(Linux)
-        XCTAssert(jsonString == """
-        [null,true,1,1.1,"a"]
-        """)
+        XCTAssertEqual(
+            jsonString,
+            """
+            [null,true,1,1.1,"a"]
+            """
+        )
         #else
-        XCTAssert(jsonString == """
-        [null,true,1,1.1000000000000001,"a"]
-        """)
+        XCTAssertEqual(
+            jsonString,
+            """
+            [null,true,1,1.1000000000000001,"a"]
+            """
+        )
         #endif
     }
 
     func testTo() throws {
-        XCTAssert(try LiteAny.nil.to(Bool?.self) == Bool?.none)
-        XCTAssert(try LiteAny.nil.to(Int?.self) == Int?.none)
-        XCTAssert(try LiteAny.nil.to(Double?.self) == Double?.none)
-        XCTAssert(try LiteAny.nil.to(String?.self) == String?.none)
+        XCTAssertEqual(try LiteAny.nil.to(Bool?.self), Bool?.none)
+        XCTAssertEqual(try LiteAny.nil.to(Int?.self), Int?.none)
+        XCTAssertEqual(try LiteAny.nil.to(Double?.self), Double?.none)
+        XCTAssertEqual(try LiteAny.nil.to(String?.self), String?.none)
 
-        XCTAssert(try LiteAny.bool(true).to(Bool?.self) == Bool?(true))
-        XCTAssert(try LiteAny.int(1).to(Int?.self) == Int?(1))
-        XCTAssert(try LiteAny.double(1.1).to(Double?.self) == Double?(1.1))
-        XCTAssert(try LiteAny.string("1").to(String?.self) == String?("1"))
+        XCTAssertEqual(try LiteAny.bool(true).to(Bool?.self), Bool?(true))
+        XCTAssertEqual(try LiteAny.int(1).to(Int?.self), Int?(1))
+        XCTAssertEqual(try LiteAny.double(1.1).to(Double?.self), Double?(1.1))
+        XCTAssertEqual(try LiteAny.string("1").to(String?.self), String?("1"))
 
-        XCTAssert(try LiteAny.bool(true).to(Bool.self) == true)
-        XCTAssert(try LiteAny.int(1).to(Int.self) == 1)
-        XCTAssert(try LiteAny.double(1.1).to(Double.self) == 1.1)
-        XCTAssert(try LiteAny.string("1").to(String.self) == "1")
+        XCTAssertEqual(try LiteAny.bool(true).to(Bool.self), true)
+        XCTAssertEqual(try LiteAny.int(1).to(Int.self), 1)
+        XCTAssertEqual(try LiteAny.double(1.1).to(Double.self), 1.1)
+        XCTAssertEqual(try LiteAny.string("1").to(String.self), "1")
 
         XCTAssertThrowsError(try LiteAny.bool(true).to(Int.self)) { error in
-            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.noMatch)
+            XCTAssertEqual(error as? LiteAny.ToErrors, LiteAny.ToErrors.noMatch)
         }
         XCTAssertThrowsError(try LiteAny.bool(true).to(Int?.self)) { error in
-            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.noMatch)
+            XCTAssertEqual(error as? LiteAny.ToErrors, LiteAny.ToErrors.noMatch)
         }
 
         XCTAssertThrowsError(try LiteAny.nil.to(String.self)) { error in
-            XCTAssert(error as? LiteAny.ToErrors == LiteAny.ToErrors.isNil)
+            XCTAssertEqual(error as? LiteAny.ToErrors, LiteAny.ToErrors.isNil)
         }
     }
 
     func testEquation() {
-        XCTAssert(LiteAny.nil == nil)
+        XCTAssertTrue(LiteAny.nil == nil)
         XCTAssertFalse(LiteAny.nil != nil)
-        XCTAssert(LiteAny.bool(true) == true)
-        XCTAssert(LiteAny.int(1) == 1)
-        XCTAssert(LiteAny.double(1.1) == 1.1)
-        XCTAssert(LiteAny.string("1") == "1")
+        XCTAssertTrue(LiteAny.bool(true) == true)
+        XCTAssertTrue(LiteAny.int(1) == 1)
+        XCTAssertTrue(LiteAny.double(1.1) == 1.1)
+        XCTAssertTrue(LiteAny.string("1") == "1")
     }
 
     static var allTests = [
