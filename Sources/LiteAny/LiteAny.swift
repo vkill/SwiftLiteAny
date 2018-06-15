@@ -6,6 +6,8 @@ public enum LiteAny: Equatable, Hashable {
     case string(String)
 }
 
+// MARK: - Codable
+
 extension LiteAny: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -50,6 +52,8 @@ extension LiteAny: Codable {
         }
     }
 }
+
+// MARK: - To(T.Type) functions
 
 public protocol LiteAnyDecodable {}
 extension Bool: LiteAnyDecodable {}
@@ -168,6 +172,8 @@ extension LiteAny {
         throw ToErrors.noMatch
     }
 }
+
+// MARK: - Equation functions
 
 extension LiteAny {
     public static func == (lhs: LiteAny, rhs: LiteAny?) -> Bool {
